@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: '10.x'
       - name: install
-        run: yarn install && yarn install --prefix functions
+        run: yarn install
       - name: generate
         run: yarn generate
       - name: deploy

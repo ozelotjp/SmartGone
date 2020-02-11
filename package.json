@@ -11,6 +11,9 @@
     "generate": "nuxt-ts generate",
     "lint": "eslint --ext .ts,.js,.vue --ignore-path .gitignore ."
   },
+  "engines": {
+    "node": "10"
+  },
   "lint-staged": {
     "*.{ts,js,vue}": "yarn lint",
     "*.{css,vue}": "stylelint"

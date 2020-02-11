@@ -1,5 +1,18 @@
-const functions = require('firebase-functions')
+import functions from 'firebase-functions'
+import admin from 'firebase-admin'
+admin.initializeApp()
 
-exports.helloWorld = functions.https.onRequest((request, response) => {
-  response.send(`Hello ${request.ip} from Firebase!`)
+exports.onTouch = functions.https.onRequest((request, _) => {
+  const idm = request.query.idm
+  admin
+    .firestore()
+    .collection('cards')
+    .doc(idm)
+    .get()
+    .then((snapshot) => {
+      console.log(snapshot.data())
+    })
+    .catch((error) => {
+      console.error(error)
+    })
 })

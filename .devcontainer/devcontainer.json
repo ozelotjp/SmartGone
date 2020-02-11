@@ -1,4 +1,6 @@
-// https://code.visualstudio.com/docs/remote/containers#_devcontainerjson-reference
+/**
+ * https://code.visualstudio.com/docs/remote/containers#_devcontainerjson-reference
+ */
 {
   "name": "SmartGone",
   "extensions": [
@@ -30,8 +32,10 @@
     ],
     "vetur.format.defaultFormatter.html": "prettier"
   },
-  "postCreateCommand": "apk add git bash",
-  // Docker-Compose
+  "postCreateCommand": "apk add git bash && yarn install",
+  /**
+   * Docker-Compose
+   */
   "dockerComposeFile": "docker-compose.yml",
   "service": "app",
   "workspaceFolder": "/app"
