@@ -17,8 +17,10 @@ jobs:
           node-version: '10.x'
       - name: install
         run: yarn install
+      - name: lint
+        run: yarn run lint
       - name: generate
-        run: yarn generate
+        run: yarn run generate
       - name: deploy
         run: yarn run firebase deploy --token "$FIREBASE_TOKEN"
         env:

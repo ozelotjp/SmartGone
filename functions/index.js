@@ -1,3 +1,4 @@
+/* eslint no-console: off */
 import functions from 'firebase-functions'
 import admin from 'firebase-admin'
 admin.initializeApp()
