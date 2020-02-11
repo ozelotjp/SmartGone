@@ -4,23 +4,33 @@ import * as admin from 'firebase-admin'
 admin.initializeApp()
 
 exports.onTouch = functions.https.onRequest((request, response) => {
-  const idm = request.query.idm
-
-  if (typeof idm === 'undefined') {
-    response.send('done')
-    return
+  if (
+    typeof request.query.idm !== 'undefined' &&
+    typeof request.query.location !== 'undefined' &&
+    typeof request.query.type !== 'undefined'
+  ) {
+    admin
+      .firestore()
+      .collection('cards')
+      .doc(request.query.idm)
+      .get()
+      .then((snapshot) => {
+        admin
+          .firestore()
+          .collection('check')
+          .doc(snapshot.data().user)
+          .set({
+            date: admin.firestore.FieldValue.serverTimestamp,
+            location: request.query.location,
+            type: request.query.type
+          })
+          .catch((error) => {
+            console.error(error)
+          })
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }
-
-  admin
-    .firestore()
-    .collection('cards')
-    .doc(idm)
-    .get()
-    .then((snapshot) => {
-      console.log(snapshot.data())
-    })
-    .catch((error) => {
-      console.error(error)
-    })
   response.send('done')
 })
