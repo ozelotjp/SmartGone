@@ -5,8 +5,8 @@
   },
   "functions": {
     "predeploy": [
-      "yarn --swd \"$RESOURCE_DIR\" run lint",
-      "yarn --swd \"$RESOURCE_DIR\" run build"
+      "yarn --cwd \"$RESOURCE_DIR\" run lint",
+      "yarn --cwd \"$RESOURCE_DIR\" run build"
     ]
   },
   "hosting": {
