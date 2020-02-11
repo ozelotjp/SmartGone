@@ -3,18 +3,23 @@ name: Node.js CI
 on:
   push:
     branches: 
-    - master
+      - master
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - uses: actions/setup-node@master
-      with:
-        node-version: '10.x'
-    - run: yarn install
-    - run: yarn generate
-    - run: firebase deploy --tolen "$FIREBASE_TOKEN"
-    - env:
-        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      - name: checkout
+        uses: actions/checkout@master
+      - name: setup-node
+        uses: actions/setup-node@master
+        with:
+          node-version: '10.x'
+      - name: install
+        run: yarn install
+      - name: generate
+        run: yarn generate
+      - name: deploy
+        run: firebase deploy --tolen "$FIREBASE_TOKEN"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
