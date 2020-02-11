@@ -32,7 +32,7 @@
     ],
     "vetur.format.defaultFormatter.html": "prettier"
   },
-  "postCreateCommand": "apk add git bash && yarn install",
+  "postCreateCommand": "apk add git bash && yarn install && yarn install --cwd functions",
   /**
    * Docker-Compose
    */

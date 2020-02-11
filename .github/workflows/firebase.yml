@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: '10.x'
       - name: install
-        run: yarn install
+        run: yarn install && yarn install --cwd functions
       - name: lint
         run: yarn run lint
       - name: generate

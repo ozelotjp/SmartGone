@@ -3,7 +3,12 @@
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
-  "functions": {},
+  "functions": {
+    "predeploy": [
+      "yarn --swd \"$RESOURCE_DIR\" run lint",
+      "yarn --swd \"$RESOURCE_DIR\" run build"
+    ]
+  },
   "hosting": {
     "public": "dist",
     "ignore": [
