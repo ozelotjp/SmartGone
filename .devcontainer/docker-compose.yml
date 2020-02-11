@@ -2,7 +2,7 @@ version: '3'
 
 services:
   app:
-    image: node:lts-alpine
+    image: node:10-alpine
     environment:
       NUXT_HOST: 0.0.0.0
     ports:
@@ -11,6 +11,7 @@ services:
     working_dir: /app
     volumes:
       - ..:/app
+      - ~/.gitconfig:/root/.gitconfig
       - yarn-cache:/usr/local/share/.cache/yarn/
     tty: true
 
