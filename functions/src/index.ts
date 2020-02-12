@@ -1,4 +1,4 @@
-/* eslint no-console: off */
+/* eslint-disable */
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
 const server = functions.region('asia-northeast1')
@@ -12,7 +12,8 @@ exports.onTouch = server.https.onRequest((request, response) => {
   ) {
     response.json({
       status: 'error',
-      description: 'no query'
+      description: 'no query',
+      query: request.query
     })
     return
   }
@@ -23,10 +24,11 @@ exports.onTouch = server.https.onRequest((request, response) => {
     .doc(request.query.idm)
     .get()
     .then((snapshot) => {
-      if (snapshot.exists === false) {
+      if (snapshot.exists === false || typeof snapshot === 'undefined') {
         response.json({
           status: 'error',
-          description: 'no snapshot'
+          description: 'no snapshot',
+          query: request.query
         })
         return
       }
@@ -41,14 +43,16 @@ exports.onTouch = server.https.onRequest((request, response) => {
         })
         .then(() => {
           response.json({
-            status: 'success'
+            status: 'success',
+            query: request.query
           })
         })
         .catch((error) => {
           response.json({
             status: 'exception',
             description: 'store:check',
-            detailes: error
+            detailes: error,
+            query: request.query
           })
         })
     })
@@ -56,7 +60,8 @@ exports.onTouch = server.https.onRequest((request, response) => {
       response.json({
         status: 'exception',
         description: 'store:cards',
-        detailes: error
+        detailes: error,
+        query: request.query
       })
     })
 })

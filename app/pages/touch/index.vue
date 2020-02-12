@@ -2,12 +2,7 @@
   <v-container>
     <v-row>
       <v-col>
-        <v-alert type="info">
-          スマートフォンまたはカードを端末にタッチしてください。
-        </v-alert>
-        <v-btn @click="debug()">
-          Debug
-        </v-btn>
+        <!-- -->
       </v-col>
     </v-row>
   </v-container>
@@ -21,7 +16,7 @@ import 'firebase/firestore'
 
 export default createComponent({
   middleware: 'authenticated',
-  setup(_, { root: { $accessor, $firebase } }) {
+  setup(_, { root: { $accessor, $firebase, $router } }) {
     const type = 'checkin'
     const typeMessage = 'チェックイン'
     const ref = $firebase
@@ -31,6 +26,22 @@ export default createComponent({
     ref.delete()
     const unsubscribe = ref.onSnapshot((querySnapshot) => {
       check(querySnapshot)
+    })
+
+    Swal.fire({
+      title: 'カード読み取り中',
+      html: 'カードを端末にタッチしてください',
+      icon: 'info',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      allowEnterKey: false,
+      showConfirmButton: false,
+      showCancelButton: true,
+      cancelButtonText: 'キャンセル'
+    }).then((result) => {
+      if (typeof result.dismiss !== 'undefined') {
+        $router.push('/')
+      }
     })
 
     function check(querySnapshot: firebase.firestore.DocumentSnapshot) {

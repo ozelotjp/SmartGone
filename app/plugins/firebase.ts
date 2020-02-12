@@ -1,4 +1,4 @@
-import { Plugin } from '@nuxt/types'
+import Vue from 'vue'
 import firebase from 'firebase/app'
 
 const firebaseConfig = {
@@ -11,9 +11,6 @@ const firebaseConfig = {
   appId: '1:98236006183:web:aa10b2609cff147e4d3302'
 }
 
-const myPlugin: Plugin = (context) => {
-  firebase.initializeApp(firebaseConfig)
-  context.$firebase = firebase
-}
+firebase.initializeApp(firebaseConfig)
 
-export default myPlugin
+Vue.prototype.$firebase = firebase
