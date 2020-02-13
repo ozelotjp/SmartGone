@@ -67,6 +67,8 @@ export default createComponent({
         title: 'Success',
         html: `${typeMessage}に成功しました<br>（${checkRecord.location}）`,
         icon: 'success'
+      }).then(() => {
+        $router.push('/')
       })
     }
 

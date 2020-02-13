@@ -8,8 +8,16 @@
     <v-row>
       <v-col>
         <v-form>
-          <v-text-field v-model="field.email" label="メールアドレス" />
-          <v-text-field v-model="field.password" label="パスワード" />
+          <v-text-field
+            v-model="field.email"
+            label="メールアドレス"
+            type="text"
+          />
+          <v-text-field
+            v-model="field.password"
+            label="パスワード"
+            type="password"
+          />
           <v-btn :loading="button.loading" @click="signin()">ログイン</v-btn>
         </v-form>
       </v-col>

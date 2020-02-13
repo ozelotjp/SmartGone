@@ -31,8 +31,10 @@
     "@vue/composition-api": "^0.3.4",
     "firebase": "^7.8.1",
     "firebase-tools": "^7.12.1",
+    "node-sass": "^4.13.1",
     "nuxt": "^2.11.0",
     "nuxt-typed-vuex": "^0.1.16",
+    "sass-loader": "^8.0.2",
     "sweetalert2": "^9.7.2"
   },
   "devDependencies": {

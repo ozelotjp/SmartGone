@@ -1,17 +1,12 @@
 <template>
   <v-app>
     <v-app-bar app>
+      <v-icon>
+        mdi-domain
+      </v-icon>
       <v-toolbar-title to="/">
-        SmartGone
+        HAL名古屋
       </v-toolbar-title>
-      <v-spacer />
-      <v-toolbar-items>
-        <v-btn icon to="/">
-          <v-icon>
-            mdi-home
-          </v-icon>
-        </v-btn>
-      </v-toolbar-items>
     </v-app-bar>
     <v-content>
       <nuxt />
@@ -37,10 +32,10 @@
             mdi-credit-card-scan
           </v-icon>
         </v-tab>
-        <v-tab to="/settings">
-          settings
+        <v-tab to="/other">
+          other
           <v-icon>
-            mdi-settings
+            mdi-menu
           </v-icon>
         </v-tab>
       </v-tabs>
