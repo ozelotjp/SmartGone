@@ -11,7 +11,7 @@
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
 import Swal from 'sweetalert2'
-import { CheckDocument, HistoryDocument, CardDocument } from '@/types/firestore'
+import { CheckDocument, HistoryDocument } from '@/types/firestore'
 import 'firebase/firestore'
 
 export default createComponent({
@@ -48,13 +48,19 @@ export default createComponent({
       if (
         querySnapshot.metadata.hasPendingWrites === true ||
         querySnapshot.exists === false
-        // querySnapshot.data() === undefined
       ) {
         return
       }
       unsubscribe()
       ref.delete()
       const checkRecord = querySnapshot.data() as CheckDocument
+      $firebase
+        .firestore()
+        .collection('users')
+        .doc($accessor.auth.id)
+        .update({
+          location: checkRecord.location
+        })
       $firebase
         .firestore()
         .collection('histories')
@@ -72,28 +78,7 @@ export default createComponent({
       })
     }
 
-    function debug() {
-      const idm = 'ABCD EFGH IJKL MNOP'
-      $firebase
-        .firestore()
-        .collection('cards')
-        .doc(idm)
-        .get()
-        .then((querySnapshot) => {
-          const cardRecord = querySnapshot.data() as CardDocument
-          $firebase
-            .firestore()
-            .collection('check')
-            .doc(cardRecord.user)
-            .set({
-              date: $firebase.firestore.FieldValue.serverTimestamp(),
-              location: '２２３教室',
-              type: 'checkin' // TODO: ここを種類によって変更する
-            } as CheckDocument)
-        })
-    }
-
-    return { debug }
+    return {}
   }
 })
 </script>

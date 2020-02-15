@@ -6,6 +6,13 @@
           <v-card-text>
             <v-list>
               <v-list-item-group>
+                <v-list-item to="/other/students">
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      生徒一覧
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
                     <v-list-item-title>
@@ -24,6 +31,13 @@
                   <v-list-item-content>
                     <v-list-item-title>
                       ログアウト
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item to="/sandbox">
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      その他
                     </v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>

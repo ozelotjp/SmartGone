@@ -11,7 +11,7 @@
     <v-content>
       <nuxt />
     </v-content>
-    <v-footer v-if="authenticated" color="primary lighten-1">
+    <v-footer v-if="authenticated" color="primary lighten-1" app>
       <v-tabs
         background-color="primary lighten-1"
         centered

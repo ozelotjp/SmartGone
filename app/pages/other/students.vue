@@ -3,9 +3,6 @@
     <v-row>
       <v-col cols="12">
         <v-card>
-          {{ nowLocation() }}
-        </v-card>
-        <v-card>
           <v-list two-line disabled class="pa-0">
             <v-list-item-group v-for="(item, index) in items" :key="index">
               <v-list-item>
@@ -40,56 +37,13 @@ import { createComponent } from '@vue/composition-api'
 import 'firebase/firestore'
 
 export default createComponent({
-  middleware: 'authenticated',
-  setup(_, { root: { $accessor, $firebase } }) {
-    const items = [
-      {
-        date: '1限',
-        date_text: '09:50 ~ 11:20',
-        subject: 'AP3S',
-        location: '141教室'
-      },
-      {
-        date: '2限',
-        date_text: '11:35 ~ 13:05',
-        subject: 'ND3S',
-        location: '141教室'
-      },
-      {
-        date: '3限',
-        date_text: '13:55 ~ 15:25',
-        subject: 'PM31',
-        location: 'マルチホール'
-      },
-      {
-        date: '4限',
-        date_text: '15:40 ~ 17:10',
-        subject: 'NT32',
-        location: '175教室'
-      },
-      {
-        date: '5限',
-        date_text: '17:20 ~ 18:50',
-        subject: 'NT32',
-        location: '175教室'
-      }
-    ]
+  middleware: 'authenticated'
+  // setup(_, { root: { $accessor } }) {
+  //   $accessor
 
-    function nowLocation() {
-      $firebase
-        .firestore()
-        .collection('users')
-        .doc($accessor.auth.id)
-        .get()
-        .then((userRecord) => {
-          return userRecord.data().location
-        })
-    }
-
-    return {
-      items,
-      nowLocation
-    }
-  }
+  //   return {
+  //     items
+  //   }
+  // }
 })
 </script>
