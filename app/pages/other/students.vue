@@ -34,16 +34,8 @@
 
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
-import 'firebase/firestore'
 
 export default createComponent({
   middleware: 'authenticated'
-  // setup(_, { root: { $accessor } }) {
-  //   $accessor
-
-  //   return {
-  //     items
-  //   }
-  // }
 })
 </script>

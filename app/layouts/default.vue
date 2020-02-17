@@ -11,7 +11,7 @@
     <v-content>
       <nuxt />
     </v-content>
-    <v-footer v-if="authenticated" color="primary lighten-1" app>
+    <v-footer color="primary lighten-1" app>
       <v-tabs
         background-color="primary lighten-1"
         centered
@@ -42,16 +42,3 @@
     </v-footer>
   </v-app>
 </template>
-
-<script lang="ts">
-import { createComponent, computed } from '@vue/composition-api'
-
-export default createComponent({
-  setup(_, { root: { $accessor } }) {
-    const authenticated = computed(() => $accessor.auth.authenticated)
-    return {
-      authenticated
-    }
-  }
-})
-</script>

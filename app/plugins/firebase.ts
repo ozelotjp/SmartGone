@@ -1,5 +1,7 @@
-import Vue from 'vue'
+import { Plugin } from '@nuxt/types'
 import firebase from 'firebase/app'
+import 'firebase/auth'
+import 'firebase/firestore'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAobDu5M7n_qFYf7ym2G6ffQxpI1cgN0xA',
@@ -10,7 +12,10 @@ const firebaseConfig = {
   messagingSenderId: '98236006183',
   appId: '1:98236006183:web:aa10b2609cff147e4d3302'
 }
-
 firebase.initializeApp(firebaseConfig)
 
-Vue.prototype.$firebase = firebase
+const myPlugin: Plugin = (_, inject) => {
+  inject('firebase', firebase)
+}
+
+export default myPlugin

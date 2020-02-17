@@ -12,25 +12,14 @@
 import { createComponent } from '@vue/composition-api'
 import Swal from 'sweetalert2'
 import { CheckDocument, HistoryDocument } from '@/types/firestore'
-import 'firebase/firestore'
 
 export default createComponent({
   middleware: 'authenticated',
-  setup(_, { root: { $accessor, $firebase, $router } }) {
-    const type = 'checkin'
-    const typeMessage = 'チェックイン'
-    const ref = $firebase
-      .firestore()
-      .collection('check')
-      .doc($accessor.auth.id)
-    ref.delete()
-    const unsubscribe = ref.onSnapshot((querySnapshot) => {
-      check(querySnapshot)
-    })
-
+  setup(_, { root: { $firebase, $router } }) {
     Swal.fire({
       title: 'カード読み取り中',
-      html: 'カードを端末にタッチしてください',
+      html:
+        'カードを端末にタッチしてください<br><a href="https://asia-northeast1-sk31-84e56.cloudfunctions.net/onTouch?id=AjeuzZDpH5FqBWVT7n5k&idm=012e3d178b509b7b" target="_blank">DEBUG</a>',
       icon: 'info',
       allowOutsideClick: false,
       allowEscapeKey: false,
@@ -38,40 +27,58 @@ export default createComponent({
       showConfirmButton: false,
       showCancelButton: true,
       cancelButtonText: 'キャンセル'
-    }).then((result) => {
-      if (typeof result.dismiss !== 'undefined') {
-        $router.push('/')
-      }
+    }).finally(() => {
+      $router.push('/')
     })
 
-    function check(querySnapshot: firebase.firestore.DocumentSnapshot) {
+    const checkReference = $firebase
+      .firestore()
+      .collection('check')
+      .doc($firebase.auth().currentUser!.uid)
+
+    // initialize document
+    checkReference.delete()
+
+    const unsubscribe = checkReference.onSnapshot((snapshot) => {
+      check(snapshot)
+    })
+
+    function check(snapshot: firebase.firestore.DocumentSnapshot) {
       if (
-        querySnapshot.metadata.hasPendingWrites === true ||
-        querySnapshot.exists === false
+        snapshot.metadata.hasPendingWrites === true ||
+        snapshot.exists === false
       ) {
         return
       }
       unsubscribe()
-      ref.delete()
-      const checkRecord = querySnapshot.data() as CheckDocument
-      $firebase
-        .firestore()
-        .collection('users')
-        .doc($accessor.auth.id)
-        .update({
-          location: checkRecord.location
-        })
+      const checkRecord = snapshot.data() as CheckDocument
+
+      // add document
       $firebase
         .firestore()
         .collection('histories')
         .add({
-          date: $firebase.firestore.FieldValue.serverTimestamp(),
-          type,
-          user: $accessor.auth.id
+          date: checkRecord.date,
+          location: checkRecord.location,
+          type: checkRecord.type,
+          user: $firebase.auth().currentUser!.uid
         } as HistoryDocument)
+
+      // update location
+      $firebase
+        .firestore()
+        .collection('users')
+        .doc($firebase.auth().currentUser!.uid)
+        .update({
+          location: checkRecord.location
+        })
+
+      // initialize document
+      checkReference.delete()
+
       Swal.fire({
         title: 'Success',
-        html: `${typeMessage}に成功しました<br>（${checkRecord.location}）`,
+        html: `${checkRecord.type}に成功しました<br>（${checkRecord.location}）`,
         icon: 'success'
       }).then(() => {
         $router.push('/')

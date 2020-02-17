@@ -37,11 +37,10 @@
 
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
-import 'firebase/firestore'
 
 export default createComponent({
   middleware: 'authenticated',
-  setup(_, { root: { $accessor, $firebase } }) {
+  setup(_, { root: { $firebase } }) {
     const items = [
       {
         date: '1限',
@@ -79,10 +78,10 @@ export default createComponent({
       $firebase
         .firestore()
         .collection('users')
-        .doc($accessor.auth.id)
+        .doc($firebase.auth().currentUser!.uid)
         .get()
-        .then((userRecord) => {
-          return userRecord.data().location
+        .then((snapshot) => {
+          return snapshot.data()!.location
         })
     }
 

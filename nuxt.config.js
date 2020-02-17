@@ -40,8 +40,7 @@ export default {
     // Doc: https://github.com/nuxt-community/stylelint-module
     '@nuxtjs/stylelint-module',
     '@nuxtjs/vuetify',
-    '@nuxt/typescript-build',
-    'nuxt-typed-vuex'
+    '@nuxt/typescript-build'
   ],
   /*
    ** Nuxt.js modules
@@ -91,8 +90,7 @@ export default {
           ]
         ]
       }
-    },
-    transpile: [/typed-vuex/]
+    }
   },
   srcDir: 'app/',
   typescript: {

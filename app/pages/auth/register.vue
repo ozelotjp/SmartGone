@@ -3,7 +3,7 @@
     <v-row>
       <v-col>
         <h1>
-          ログイン
+          ユーザ登録
         </h1>
       </v-col>
     </v-row>
@@ -20,8 +20,8 @@
             label="パスワード"
             type="password"
           />
-          <v-btn :loading="button.loading" @click="signin()">
-            ログイン
+          <v-btn :loading="button.loading" @click="register()">
+            ユーザ登録
           </v-btn>
         </v-form>
       </v-col>
@@ -44,15 +44,15 @@ export default createComponent({
       loading: false
     })
 
-    function signin() {
+    function register() {
       button.loading = true
       $firebase
         .auth()
-        .signInWithEmailAndPassword(field.email, field.password)
-        .catch(() => {
+        .createUserWithEmailAndPassword(field.email, field.password)
+        .catch(function(error) {
           Swal.fire({
             title: 'Error',
-            text: 'メールアドレスまたはパスワードが違います',
+            text: error.message,
             icon: 'error'
           })
         })
@@ -68,7 +68,7 @@ export default createComponent({
       $router.push('/')
     })
 
-    return { field, button, signin }
+    return { field, button, register }
   }
 })
 </script>
