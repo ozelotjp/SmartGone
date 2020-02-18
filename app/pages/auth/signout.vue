@@ -22,7 +22,7 @@ import { createComponent, reactive } from '@vue/composition-api'
 import Swal from 'sweetalert2'
 
 export default createComponent({
-  setup(_, { root: { $firebase, $router } }) {
+  setup(_, { root: { $firebase } }) {
     const button = reactive({
       loading: false
     })
@@ -48,7 +48,7 @@ export default createComponent({
       if (user !== null) {
         return
       }
-      $router.push('/')
+      location.reload()
     })
 
     return { button, signout }
