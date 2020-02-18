@@ -5,37 +5,32 @@
         <v-card>
           <v-card-text>
             <v-list two-line disabled class="pa-0">
-              <v-list-item-group
-                v-for="(item, index) in state.schedule"
-                :key="index"
-              >
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      {{ item.subject }}
-                    </v-list-item-title>
-                    <v-list-item-subtitle>
-                      {{ item.location }}
-                      <v-icon
-                        v-if="item.location === state.nowLocation"
-                        small
-                        color="green"
-                      >
-                        mdi-check-circle
-                      </v-icon>
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
-                  <v-list-item-action>
-                    <v-list-item-action-text>
-                      {{ item.date }}
-                    </v-list-item-action-text>
-                    <v-list-item-action-text>
-                      {{ item.dateText }}
-                    </v-list-item-action-text>
-                  </v-list-item-action>
-                </v-list-item>
-                <v-divider v-if="index + 1 < state.schedule.length" />
-              </v-list-item-group>
+              <v-list-item v-for="(item, index) in state.schedule" :key="index">
+                <v-list-item-content>
+                  <v-list-item-title>
+                    {{ item.subject }}
+                  </v-list-item-title>
+                  <v-list-item-subtitle>
+                    {{ item.location }}
+                    <v-icon
+                      v-if="item.location === state.nowLocation"
+                      small
+                      color="green"
+                    >
+                      mdi-check-circle
+                    </v-icon>
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+                <v-list-item-action>
+                  <v-list-item-action-text>
+                    {{ item.date }}
+                  </v-list-item-action-text>
+                  <v-list-item-action-text>
+                    {{ item.dateText }}
+                  </v-list-item-action-text>
+                </v-list-item-action>
+              </v-list-item>
+              <v-divider v-if="index + 1 < state.schedule.length" />
             </v-list>
           </v-card-text>
         </v-card>
@@ -58,7 +53,8 @@ export default createComponent({
   setup(_, { root: { $firebase } }) {
     const state = reactive({
       nowLocation: '',
-      schedule: [] as Schedule[]
+      schedule: [] as Schedule[],
+      select: 2
     })
 
     $firebase

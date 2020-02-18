@@ -1235,7 +1235,7 @@
     serve-static "^1.14.1"
     server-destroy "^1.0.1"
 
-"@nuxt/types@0.6.1", "@nuxt/types@>=0.3.0":
+"@nuxt/types@0.6.1":
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/@nuxt/types/-/types-0.6.1.tgz#f94601630367ba790e6ca320c30406a4e253599d"
   integrity sha512-9qOjHgLfUSZOicDXbAh/jg9dSFDdE4MVVSQdMTtmwEpGUKLqawrUwkypRtn8jDcvAtf0EADo/1VunpuN5j7jTg==
@@ -8445,15 +8445,6 @@ number-is-nan@^1.0.0:
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
   integrity sha1-CXtgK1NCKlIsGvuHkDGDNpQaAR0=
 
-nuxt-typed-vuex@^0.1.16:
-  version "0.1.16"
-  resolved "https://registry.yarnpkg.com/nuxt-typed-vuex/-/nuxt-typed-vuex-0.1.16.tgz#4ec0e7a65bb51459dddb45ec307ac8ff35c5ce23"
-  integrity sha512-Ino19mjj07z+iB4pCUI44e086Y4C6NTsrGpupBiGVeMRv1ycbt16uE/aNEwvKaKa/NUq7pWvNe7lQ4tLrjt0eQ==
-  dependencies:
-    "@nuxt/types" ">=0.3.0"
-    normalize-path "^3.0.0"
-    typed-vuex "0.1.16"
-
 nuxt@^2.11.0:
   version "2.11.0"
   resolved "https://registry.yarnpkg.com/nuxt/-/nuxt-2.11.0.tgz#654664fe1a95af2014fd55c38ba2c732bfa5edc5"
@@ -11847,13 +11838,6 @@ type@^2.0.0:
   resolved "https://registry.yarnpkg.com/type/-/type-2.0.0.tgz#5f16ff6ef2eb44f260494dae271033b29c09a9c3"
   integrity sha512-KBt58xCHry4Cejnc2ISQAF7QY+ORngsWfxezO68+12hKV6lQY8P/psIkcbjeHWn7MqcgciWJyCCevFMJdIXpow==
 
-typed-vuex@0.1.16:
-  version "0.1.16"
-  resolved "https://registry.yarnpkg.com/typed-vuex/-/typed-vuex-0.1.16.tgz#7b11c4ebda8b895f0af21b74a128d1a37b733f4e"
-  integrity sha512-C85/RmJPumbXwVW1+dcA0S2jwK3c1WPhr/z8Bp+csEM6nh3WOiLLtvIhiHeWqP0wMx0Ff1Sb1ZZNAW+a2aUuvQ==
-  dependencies:
-    vuex "^3.0.0"
-
 typedarray-to-buffer@^3.1.5:
   version "3.1.5"
   resolved "https://registry.yarnpkg.com/typedarray-to-buffer/-/typedarray-to-buffer-3.1.5.tgz#a97ee7a9ff42691b9f783ff1bc5112fe3fca9080"
@@ -12395,7 +12379,7 @@ vuetify@^2.2.8:
   resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-2.2.11.tgz#40133761842c556070c5dc749ee32cb9df9ffe7f"
   integrity sha512-lqhW7UIEx742G0VRAgXS1q2h4aAAGC7QTh2gxha+w12NsF5lrNXy2/ob5qvdklzCk6qS0ij7zbh2FooDdGP/QQ==
 
-vuex@^3.0.0, vuex@^3.1.2:
+vuex@^3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.1.2.tgz#a2863f4005aa73f2587e55c3fadf3f01f69c7d4d"
   integrity sha512-ha3jNLJqNhhrAemDXcmMJMKf1Zu4sybMPr9KxJIuOpVcsDQlTBYLLladav2U+g1AvdYDG5Gs0xBTb0M5pXXYFQ==

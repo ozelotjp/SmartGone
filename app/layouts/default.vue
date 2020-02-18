@@ -8,7 +8,10 @@
         HAL名古屋
       </v-toolbar-title>
       <v-spacer />
-      <v-btn>
+      <v-btn text>
+        <v-icon>
+          mdi-map-marker
+        </v-icon>
         {{ state.location }}
       </v-btn>
     </v-app-bar>
@@ -54,7 +57,7 @@ export default createComponent({
   middleware: 'authenticated',
   setup(_, { root: { $firebase } }) {
     const state = reactive({
-      location: null as string | null
+      location: '' as string
     })
 
     $firebase

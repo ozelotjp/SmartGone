@@ -15,6 +15,18 @@ import { CheckDocument, HistoryDocument } from '@/types/firestore'
 
 export default createComponent({
   setup(_, { root: { $firebase, $router } }) {
+    const checkReference = $firebase
+      .firestore()
+      .collection('check')
+      .doc($firebase.auth().currentUser!.uid)
+
+    // initialize document
+    checkReference.delete()
+
+    const unsubscribe = checkReference.onSnapshot((snapshot) => {
+      check(snapshot)
+    })
+
     Swal.fire({
       title: 'カード読み取り中',
       html:
@@ -27,19 +39,8 @@ export default createComponent({
       showCancelButton: true,
       cancelButtonText: 'キャンセル'
     }).finally(() => {
+      unsubscribe()
       $router.push('/')
-    })
-
-    const checkReference = $firebase
-      .firestore()
-      .collection('check')
-      .doc($firebase.auth().currentUser!.uid)
-
-    // initialize document
-    checkReference.delete()
-
-    const unsubscribe = checkReference.onSnapshot((snapshot) => {
-      check(snapshot)
     })
 
     function check(snapshot: firebase.firestore.DocumentSnapshot) {
