@@ -14,7 +14,6 @@ import Swal from 'sweetalert2'
 import { CheckDocument, HistoryDocument } from '@/types/firestore'
 
 export default createComponent({
-  middleware: 'authenticated',
   setup(_, { root: { $firebase, $router } }) {
     Swal.fire({
       title: 'カード読み取り中',
@@ -76,9 +75,20 @@ export default createComponent({
       // initialize document
       checkReference.delete()
 
+      const successMessage = (() => {
+        switch (checkRecord.type) {
+          case 'checkin':
+            return 'チェックインが完了しました'
+          case 'checkout':
+            return 'チェックアウトが完了しました'
+          case 'checkpoint':
+            return 'チェックポイントを通過しました'
+        }
+      })()
+
       Swal.fire({
         title: 'Success',
-        html: `${checkRecord.type}に成功しました<br>（${checkRecord.location}）`,
+        html: `${successMessage}<br>（${checkRecord.location}）`,
         icon: 'success'
       }).then(() => {
         $router.push('/')

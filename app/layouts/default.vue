@@ -7,6 +7,10 @@
       <v-toolbar-title to="/">
         HAL名古屋
       </v-toolbar-title>
+      <v-spacer />
+      <v-btn>
+        {{ state.location }}
+      </v-btn>
     </v-app-bar>
     <v-content>
       <nuxt />
@@ -42,3 +46,31 @@
     </v-footer>
   </v-app>
 </template>
+
+<script lang="ts">
+import { createComponent, reactive } from '@vue/composition-api'
+
+export default createComponent({
+  middleware: 'authenticated',
+  setup(_, { root: { $firebase } }) {
+    const state = reactive({
+      location: null as string | null
+    })
+
+    $firebase
+      .firestore()
+      .collection('users')
+      .doc($firebase.auth().currentUser!.uid)
+      .onSnapshot((snapshot) => {
+        if (snapshot.exists === false) {
+          return
+        }
+        state.location = snapshot.data()!.location
+      })
+
+    return {
+      state
+    }
+  }
+})
+</script>

@@ -34,7 +34,7 @@ import { createComponent, reactive } from '@vue/composition-api'
 import Swal from 'sweetalert2'
 
 export default createComponent({
-  middleware: 'non-authenticated',
+  layout: 'guest',
   setup(_, { root: { $firebase, $router } }) {
     const field = reactive({
       email: 'example@ozelot.app',

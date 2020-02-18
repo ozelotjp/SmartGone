@@ -22,7 +22,6 @@ import { createComponent, reactive } from '@vue/composition-api'
 import Swal from 'sweetalert2'
 
 export default createComponent({
-  middleware: 'authenticated',
   setup(_, { root: { $firebase, $router } }) {
     const button = reactive({
       loading: false

@@ -9,11 +9,11 @@
                 <v-list-item
                   v-for="(item, index) in items"
                   :key="index"
-                  :to="item.to"
+                  :to="item"
                 >
                   <v-list-item-content>
                     <v-list-item-title>
-                      {{ item.title }}
+                      {{ item }}
                     </v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
@@ -31,28 +31,7 @@ import { createComponent } from '@vue/composition-api'
 
 export default createComponent({
   setup() {
-    const items = [
-      {
-        title: '移動履歴',
-        to: '/other/history'
-      },
-      {
-        title: 'カード管理',
-        to: '/other/card'
-      },
-      {
-        title: '生徒一覧',
-        to: '/other/students'
-      },
-      {
-        title: 'ログアウト',
-        to: '/auth/signout'
-      },
-      {
-        title: 'デバッグ',
-        to: '/debug/'
-      }
-    ]
+    const items = ['/debug/terminal']
 
     return {
       items

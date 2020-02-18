@@ -5,12 +5,12 @@ export interface CardDocument {
 export interface CheckDocument {
   date: firebase.firestore.Timestamp
   location: string
-  type: 'checkin' | 'checkout' | 'dropin'
+  type: 'checkin' | 'checkout' | 'checkpoint'
 }
 
 export interface HistoryDocument {
   date: firebase.firestore.Timestamp
-  type: 'checkin' | 'checkout' | 'dropin'
+  type: 'checkin' | 'checkout' | 'checkpoint'
   user: string
 }
 

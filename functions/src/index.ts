@@ -14,7 +14,11 @@ exports.onTouch = server.https.onRequest((request, response) => {
   }
 
   admin
-    .firestore().collection('terminals').doc(request.query.id).get().then((terminalRecord) => {
+    .firestore()
+    .collection('terminals')
+    .doc(request.query.id)
+    .get()
+    .then((terminalRecord) => {
       if (terminalRecord.exists === false) {
         response.json({ status: 'error' })
         return
