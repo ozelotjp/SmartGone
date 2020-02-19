@@ -2,105 +2,150 @@
   <v-container>
     <v-row>
       <v-col cols="12">
-        <v-card>
-          <v-card-text>
-            <v-list two-line disabled class="pa-0">
-              <v-list-item v-for="(item, index) in state.schedule" :key="index">
-                <v-list-item-content>
-                  <v-list-item-title>
-                    {{ item.subject }}
-                  </v-list-item-title>
-                  <v-list-item-subtitle>
-                    {{ item.location }}
-                    <v-icon
-                      v-if="item.location === state.nowLocation"
-                      small
-                      color="green"
-                    >
-                      mdi-check-circle
-                    </v-icon>
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-                <v-list-item-action>
-                  <v-list-item-action-text>
-                    {{ item.date }}
-                  </v-list-item-action-text>
-                  <v-list-item-action-text>
-                    {{ item.dateText }}
-                  </v-list-item-action-text>
-                </v-list-item-action>
-              </v-list-item>
-              <v-divider v-if="index + 1 < state.schedule.length" />
-            </v-list>
-          </v-card-text>
-        </v-card>
+        <v-alert v-if="state.status === 'blue'" type="info">
+          まもなく講義が始まります
+        </v-alert>
+        <v-alert v-if="state.status === 'orange'" type="warning">
+          すでに講義は始まっています
+        </v-alert>
+        <v-simple-table>
+          <thead>
+            <tr>
+              <th />
+              <th class="text-center">
+                時間
+              </th>
+              <th class="text-center">
+                場所
+              </th>
+            </tr>
+          </thead>
+          <tbody class="text-center">
+            <tr v-for="(item, index) in state.schedules" :key="index">
+              <td>
+                <v-chip
+                  :color="getStatusColor(item)"
+                  :dark="!!getStatusColor(item)"
+                >
+                  {{ item.timetable }}限
+                </v-chip>
+              </td>
+              <td>
+                {{ formatTime(item.time.start) }}
+                ~
+                {{ formatTime(item.time.end) }}
+              </td>
+              <td>
+                {{ item.location }}
+              </td>
+            </tr>
+          </tbody>
+        </v-simple-table>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script lang="ts">
-import { createComponent, reactive } from '@vue/composition-api'
-
-interface Schedule {
-  date: string
-  dateText: string
-  subject: string
-  location: string
-}
+import {
+  createComponent,
+  reactive,
+  onUnmounted,
+  computed
+} from '@vue/composition-api'
+import firebase from 'firebase/app'
+import { ScheduleDocument, UserDocument } from '@/types/firestore'
 
 export default createComponent({
   setup(_, { root: { $firebase } }) {
     const state = reactive({
-      nowLocation: '',
-      schedule: [] as Schedule[],
-      select: 2
+      location: '',
+      schedules: [] as ScheduleDocument[],
+      status: '' as 'green' | 'blue' | 'orange'
+    })
+    const subscribeList = [] as Function[]
+
+    const now = computed(() => {
+      return $firebase.firestore.Timestamp.fromDate(
+        new Date('2020/02/21 15:40:00')
+      )
     })
 
+    // listen user document
+    subscribeList.push(
+      $firebase
+        .firestore()
+        .collection('users')
+        .doc($firebase.auth().currentUser!.uid)
+        .onSnapshot((snapshot) => {
+          const user = snapshot.data() as UserDocument
+          state.location = user.location
+        })
+    )
+
+    // load schedules collection
     $firebase
       .firestore()
-      .collection('users')
-      .doc($firebase.auth().currentUser!.uid)
+      .collection('schedules')
+      .orderBy('timetable')
       .get()
       .then((snapshot) => {
-        state.nowLocation = snapshot.data()!.location
+        snapshot.forEach((doc) => {
+          const schedule = doc.data() as ScheduleDocument
+          state.schedules.push(schedule)
+        })
       })
 
-    state.schedule = [
-      {
-        date: '1限',
-        dateText: '09:50 ~ 11:20',
-        subject: 'AP3S',
-        location: '141教室'
-      },
-      {
-        date: '2限',
-        dateText: '11:35 ~ 13:05',
-        subject: 'ND3S',
-        location: '141教室'
-      },
-      {
-        date: '3限',
-        dateText: '13:55 ~ 15:25',
-        subject: 'PM31',
-        location: 'マルチホール'
-      },
-      {
-        date: '4限',
-        dateText: '15:40 ~ 17:10',
-        subject: 'NT32',
-        location: '175教室'
-      },
-      {
-        date: '5限',
-        dateText: '17:20 ~ 18:50',
-        subject: 'NT32',
-        location: '175教室'
+    const nextTimetable = computed(() => {
+      let nextTimetable = 0
+      state.schedules.forEach((schedule) => {
+        if (nextTimetable !== 0) {
+          return
+        }
+        if (now.value.seconds < schedule.time.end.seconds) {
+          nextTimetable = schedule.timetable
+        }
+      })
+      return nextTimetable
+    })
+
+    onUnmounted(() => {
+      subscribeList.forEach((unsubscribe) => {
+        unsubscribe()
+      })
+    })
+
+    function formatTime(timestamp: firebase.firestore.Timestamp): string {
+      const h = ('0' + timestamp.toDate().getHours()).slice(-2)
+      const m = ('0' + timestamp.toDate().getMinutes()).slice(-2)
+      return `${h}:${m}`
+    }
+
+    function getStatusColor(schedule: ScheduleDocument): string {
+      // const now = $firebase.firestore.Timestamp.now()
+      const now = $firebase.firestore.Timestamp.fromDate(
+        new Date('2020/02/21 15:40:00')
+      )
+
+      if (schedule.timetable === nextTimetable.value) {
+        if (schedule.location === state.location) {
+          state.status = 'green'
+          return 'green'
+        }
+        if (schedule.time.start.seconds > now.seconds) {
+          state.status = 'blue'
+          return 'blue'
+        }
+        state.status = 'orange'
+        return 'orange'
       }
-    ]
+      return ''
+    }
 
     return {
-      state
+      state,
+      formatTime,
+      getStatusColor
     }
   }
 })

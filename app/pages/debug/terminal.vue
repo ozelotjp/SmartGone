@@ -17,13 +17,24 @@
             <v-list>
               <v-list-item-group>
                 <v-list-item
-                  v-for="(item, index) in items"
+                  v-for="(item, index) in [
+                    '校内',
+                    '141教室',
+                    'マルチホール',
+                    '175教室',
+                    '校外'
+                  ]"
                   :key="index"
                   @click="updateFirestore(item)"
                 >
+                  <v-list-item-icon>
+                    <v-icon v-if="state.location === item" color="red">
+                      mdi-arrow-right
+                    </v-icon>
+                  </v-list-item-icon>
                   <v-list-item-content>
                     <v-list-item-title>
-                      {{ item.location }} / {{ item.type }}
+                      {{ item }}
                     </v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
@@ -40,69 +51,50 @@
 import { createComponent, reactive } from '@vue/composition-api'
 
 interface Item {
-  location: string | null
-  type: 'checkin' | 'checkout' | 'checkpoint' | null
+  location: string
+  type: 'checkin' | 'checkpoint' | 'checkout'
 }
 
 export default createComponent({
   setup(_, { root: { $firebase } }) {
     const state = reactive({
-      location: null,
-      type: null
-    } as Item)
-
-    const items = [
-      {
-        location: '校内',
-        type: 'checkin'
-      },
-      {
-        location: '175教室',
-        type: 'checkpoint'
-      },
-      {
-        location: '校外',
-        type: 'checkout'
-      }
-    ] as Item[]
+      location: '',
+      type: ''
+    })
 
     $firebase
       .firestore()
       .collection('terminals')
       .doc('AjeuzZDpH5FqBWVT7n5k')
-      .get()
-      .then((snapshot) => {
-        updateState({
-          location: snapshot.data()!.location,
-          type: snapshot.data()!.type
-        })
+      .onSnapshot((snapshot) => {
+        state.location = snapshot.data()!.location
+        state.type = snapshot.data()!.type
       })
 
-    function updateState(item: Item) {
-      state.location = item.location
-      state.type = item.type
-    }
+    function updateFirestore(location: string) {
+      const type = (() => {
+        switch (location) {
+          case '校内':
+            return 'checkin'
+          case '校外':
+            return 'checkout'
+          default:
+            return 'checkpoint'
+        }
+      })()
 
-    function updateFirestore(item: Item) {
       $firebase
         .firestore()
         .collection('terminals')
         .doc('AjeuzZDpH5FqBWVT7n5k')
         .update({
-          type: item.type,
-          location: item.location
-        })
-        .then(() => {
-          updateState({
-            type: item.type,
-            location: item.location
-          })
+          type,
+          location
         })
     }
 
     return {
       state,
-      items,
       updateFirestore
     }
   }

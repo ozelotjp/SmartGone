@@ -44,6 +44,13 @@ export default createComponent({
       loading: false
     })
 
+    $firebase.auth().onAuthStateChanged((user) => {
+      if (user === null) {
+        return
+      }
+      $router.push('/')
+    })
+
     function signin() {
       button.loading = true
       $firebase
@@ -61,14 +68,11 @@ export default createComponent({
         })
     }
 
-    $firebase.auth().onAuthStateChanged((user) => {
-      if (user === null) {
-        return
-      }
-      $router.push('/')
-    })
-
-    return { field, button, signin }
+    return {
+      field,
+      button,
+      signin
+    }
   }
 })
 </script>

@@ -33,10 +33,10 @@
             mdi-home
           </v-icon>
         </v-tab>
-        <v-tab to="/touch">
-          touch
+        <v-tab to="/message">
+          message
           <v-icon>
-            mdi-credit-card-scan
+            mdi-message
           </v-icon>
         </v-tab>
         <v-tab to="/other">
@@ -51,7 +51,9 @@
 </template>
 
 <script lang="ts">
-import { createComponent, reactive } from '@vue/composition-api'
+import { createComponent, reactive, onUnmounted } from '@vue/composition-api'
+import Swal from 'sweetalert2'
+import { HistoryDocument } from '@/types/firestore'
 
 export default createComponent({
   middleware: 'authenticated',
@@ -59,17 +61,56 @@ export default createComponent({
     const state = reactive({
       location: '' as string
     })
+    const subscribeList = [] as Function[]
 
-    $firebase
-      .firestore()
-      .collection('users')
-      .doc($firebase.auth().currentUser!.uid)
-      .onSnapshot((snapshot) => {
-        if (snapshot.exists === false) {
-          return
-        }
-        state.location = snapshot.data()!.location
+    // listen histories
+    subscribeList.push(
+      $firebase
+        .firestore()
+        .collection('histories')
+        .where('user', '==', $firebase.auth().currentUser!.uid)
+        .where('date', '<', Date.now())
+        .onSnapshot((snapshot) => {
+          snapshot.docChanges().forEach((change) => {
+            const history = change.doc.data() as HistoryDocument
+            const successMessage = (() => {
+              switch (history.type) {
+                case 'checkin':
+                  return 'チェックインが完了しました'
+                case 'checkout':
+                  return 'チェックアウトが完了しました'
+                case 'checkpoint':
+                  return 'チェックポイントを通過しました'
+              }
+            })()
+            Swal.fire({
+              title: 'Success',
+              html: `${successMessage}<br>（${history.location}）`,
+              icon: 'success'
+            })
+          })
+        })
+    )
+
+    // listen location
+    subscribeList.push(
+      $firebase
+        .firestore()
+        .collection('users')
+        .doc($firebase.auth().currentUser!.uid)
+        .onSnapshot((snapshot) => {
+          if (snapshot.exists === false) {
+            return
+          }
+          state.location = snapshot.data()!.location
+        })
+    )
+
+    onUnmounted(() => {
+      subscribeList.forEach((unsubscribe) => {
+        unsubscribe()
       })
+    })
 
     return {
       state

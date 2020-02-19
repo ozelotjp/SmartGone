@@ -19,30 +19,12 @@
 
 <script lang="ts">
 import { createComponent, reactive } from '@vue/composition-api'
-import Swal from 'sweetalert2'
 
 export default createComponent({
   setup(_, { root: { $firebase } }) {
     const button = reactive({
       loading: false
     })
-
-    function signout() {
-      button.loading = true
-      $firebase
-        .auth()
-        .signOut()
-        .catch(() => {
-          Swal.fire({
-            title: 'Error',
-            text: '不明なエラーが発生しました',
-            icon: 'error'
-          })
-        })
-        .finally(() => {
-          button.loading = false
-        })
-    }
 
     $firebase.auth().onAuthStateChanged((user) => {
       if (user !== null) {
@@ -51,7 +33,20 @@ export default createComponent({
       location.reload()
     })
 
-    return { button, signout }
+    function signout() {
+      button.loading = true
+      $firebase
+        .auth()
+        .signOut()
+        .finally(() => {
+          button.loading = false
+        })
+    }
+
+    return {
+      button,
+      signout
+    }
   }
 })
 </script>
