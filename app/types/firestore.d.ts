@@ -11,6 +11,12 @@ export interface HistoryDocument {
   user: string
 }
 
+export interface MessageDocument {
+  date: firebase.firestore.Timestamp
+  name: string
+  text: string
+}
+
 export interface ScheduleDocument {
   location: string
   time: {

@@ -32,14 +32,14 @@ import { createComponent } from '@vue/composition-api'
 export default createComponent({
   setup() {
     const items = [
-      {
-        title: '移動履歴',
-        to: '/other/history'
-      },
-      {
-        title: 'カード管理',
-        to: '/other/card'
-      },
+      // {
+      //   title: '移動履歴',
+      //   to: '/other/history'
+      // },
+      // {
+      //   title: 'カード管理',
+      //   to: '/other/card'
+      // },
       {
         title: '生徒一覧',
         to: '/other/students'

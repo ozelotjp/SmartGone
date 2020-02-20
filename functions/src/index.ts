@@ -37,12 +37,24 @@ exports.onTouch = server.https.onRequest((request, response) => {
 
           admin
             .firestore()
+            .collection('users')
+            .doc(cardRecord.data().user)
             .collection('histories')
             .add({
               date: admin.firestore.FieldValue.serverTimestamp(),
               location: terminalRecord.data().location,
-              type: terminalRecord.data().type,
-              user: cardRecord.data().user
+              type: terminalRecord.data().type
+            }).catch(() => {
+              response.json({ status: 'error' })
+              return
+            })
+
+          admin
+            .firestore()
+            .collection('users')
+            .doc(cardRecord.data().user)
+            .update({
+              location: terminalRecord.data().location
             }).catch(() => {
               response.json({ status: 'error' })
               return

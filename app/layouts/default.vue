@@ -67,27 +67,31 @@ export default createComponent({
     subscribeList.push(
       $firebase
         .firestore()
+        .collection('users')
+        .doc($firebase.auth().currentUser!.uid)
         .collection('histories')
-        .where('user', '==', $firebase.auth().currentUser!.uid)
-        .where('date', '<', Date.now())
+        // .where('date', '<', Date.now())
         .onSnapshot((snapshot) => {
           snapshot.docChanges().forEach((change) => {
-            const history = change.doc.data() as HistoryDocument
-            const successMessage = (() => {
-              switch (history.type) {
-                case 'checkin':
-                  return 'チェックインが完了しました'
-                case 'checkout':
-                  return 'チェックアウトが完了しました'
-                case 'checkpoint':
-                  return 'チェックポイントを通過しました'
-              }
-            })()
-            Swal.fire({
-              title: 'Success',
-              html: `${successMessage}<br>（${history.location}）`,
-              icon: 'success'
-            })
+            // TODO: 絶対おかしい！！！
+            if (state.location !== '') {
+              const history = change.doc.data() as HistoryDocument
+              const successMessage = (() => {
+                switch (history.type) {
+                  case 'checkin':
+                    return 'チェックインが完了しました'
+                  case 'checkout':
+                    return 'チェックアウトが完了しました'
+                  case 'checkpoint':
+                    return 'チェックポイントを通過しました'
+                }
+              })()
+              Swal.fire({
+                title: 'Success',
+                html: `${successMessage}<br>（${history.location}）`,
+                icon: 'success'
+              })
+            }
           })
         })
     )

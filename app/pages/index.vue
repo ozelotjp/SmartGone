@@ -2,6 +2,9 @@
   <v-container>
     <v-row>
       <v-col cols="12">
+        <v-alert v-if="state.message" type="info">
+          メッセージが届いています
+        </v-alert>
         <v-alert v-if="state.status === 'blue'" type="info">
           まもなく講義が始まります
         </v-alert>
@@ -61,7 +64,8 @@ export default createComponent({
     const state = reactive({
       location: '',
       schedules: [] as ScheduleDocument[],
-      status: '' as 'green' | 'blue' | 'orange'
+      status: '' as 'green' | 'blue' | 'orange',
+      message: false
     })
     const subscribeList = [] as Function[]
 
@@ -109,6 +113,17 @@ export default createComponent({
       return nextTimetable
     })
 
+    // get messages
+    $firebase
+      .firestore()
+      .collection('messages')
+      .where('date', '>=', new Date('2020/02/21 00:00:00'))
+      .orderBy('date', 'desc')
+      .get()
+      .then((snapshot) => {
+        state.message = snapshot.size > 0
+      })
+
     onUnmounted(() => {
       subscribeList.forEach((unsubscribe) => {
         unsubscribe()
@@ -117,8 +132,8 @@ export default createComponent({
 
     function formatTime(timestamp: firebase.firestore.Timestamp): string {
       const h = ('0' + timestamp.toDate().getHours()).slice(-2)
-      const m = ('0' + timestamp.toDate().getMinutes()).slice(-2)
-      return `${h}:${m}`
+      const i = ('0' + timestamp.toDate().getMinutes()).slice(-2)
+      return `${h}:${i}`
     }
 
     function getStatusColor(schedule: ScheduleDocument): string {
