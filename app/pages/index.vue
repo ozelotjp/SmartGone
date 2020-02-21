@@ -71,7 +71,7 @@ export default createComponent({
 
     const now = computed(() => {
       return $firebase.firestore.Timestamp.fromDate(
-        new Date('2020/02/21 15:40:00')
+        new Date('2020/02/21 11:34:00')
       )
     })
 
