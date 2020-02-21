@@ -137,10 +137,7 @@ export default createComponent({
     }
 
     function getStatusColor(schedule: ScheduleDocument): string {
-      // const now = $firebase.firestore.Timestamp.now()
-      const now = $firebase.firestore.Timestamp.fromDate(
-        new Date('2020/02/21 15:40:00')
-      )
+      const now = $firebase.firestore.Timestamp.now()
 
       if (schedule.timetable === nextTimetable.value) {
         if (schedule.location === state.location) {
